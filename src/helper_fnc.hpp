@@ -1,0 +1,14 @@
+////////////////////////////////////////////////////////////////////////////////
+// Helper functions
+////////////////////////////////////////////////////////////////////////////////
+
+#ifndef HELPER_FNC_HPP
+#define HELPER_FNC_HPP
+
+#include "log_entry.hpp"
+#include <string>
+
+// parse a line of input and return a LogEntry
+LogEntry parseLine(const std::string &) noexcept;
+
+#endif
