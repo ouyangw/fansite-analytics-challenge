@@ -36,8 +36,8 @@ int main(int argc, char **argv)
     LogEntry line(parseLine(s));
     if (i == 0) firstLine = line;
     std::time_t t(std::chrono::system_clock::to_time_t(line.time));
-    // gmtime take into account the actual time zone in rumtime.
-    std::tm tm(*std::gmtime(&t));
+    // system_clock take into account the time zone in runtime
+    std::tm tm(*std::localtime(&t));
     std::strftime(time, 21, "%d/%b/%G:%H:%M:%S", &tm);
     outfile << line.host << " - - "
             << '[' << time << ' ';
