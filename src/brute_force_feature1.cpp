@@ -32,6 +32,7 @@ int main(int argc, char **argv)
     return 3;
   }
 
+  // map from host to connection count
   std::unordered_map<std::string, size_t> map;
   std::string s;
   std::size_t lineCount(0);
@@ -46,9 +47,14 @@ int main(int argc, char **argv)
   vec.reserve(map.size());
   for (const auto &p: map)
     vec.emplace_back(p.second, p.first);
-  std::partial_sort(vec.begin(), vec.begin() + 10, vec.end(),
-                    std::greater<std::pair<size_t, std::string>>());
-  for (size_t i(0); i < 10; ++i)
+  const size_t size(vec.size() > 10 ? 10 : vec.size());
+  if (vec.size() > 10)
+    std::partial_sort(vec.begin(), vec.begin() + 10, vec.end(),
+                      std::greater<std::pair<size_t, std::string>>());
+  else
+    std::sort(vec.begin(), vec.end(),
+              std::greater<std::pair<size_t, std::string>>());
+  for (size_t i(0); i < size; ++i)
     outfile << vec[i].second << ',' << vec[i].first << '\n';
   infile.close();
   outfile.close();
