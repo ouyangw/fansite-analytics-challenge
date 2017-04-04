@@ -5,7 +5,8 @@
 // Offline calculation:
 //   1. Use min-heap to keep track of 10 busiest periods outside 1 hour.
 //   2. Use a queue to keep track of periods within 1 hour.
-//   3. Dump queue into min-heap and get final result.
+//   3. Use a fake time that is 2 hours later than the last line to pop the
+//      elements in queue into min-heap.
 ////////////////////////////////////////////////////////////////////////////////
 
 #include "helper_fnc.hpp"
@@ -21,11 +22,10 @@
 struct TimeHit {
   std::string timeStr;
   size_t hits;
-  LogEntry::TimePoint time;
-  TimeHit(size_t h, const LogEntry &line)
+  TimeHit(size_t h, const LogEntry::TimePoint &time,
+          const std::string &timezoneStr)
       : timeStr()
       , hits(h)
-      , time(line.time)
   {
     // construct the string representation of time: timeStr
     char tmp[21];
@@ -33,16 +33,7 @@ struct TimeHit {
     // system_clock take into account the time zone in runtime
     std::strftime(tmp, 21, "%d/%b/%G:%H:%M:%S", std::localtime(&t));
     timeStr.assign(tmp);
-    if (line.timezone < 0)
-      timeStr += " -";
-    else
-      timeStr += " -";
-    const short absTimezone(std::abs(line.timezone));
-    if (absTimezone > 9)
-      timeStr += std::to_string(absTimezone);
-    else
-      timeStr += "0" + std::to_string(absTimezone);
-    timeStr += "00";
+    timeStr += timezoneStr;
   }
 };
 
@@ -72,17 +63,22 @@ int main(int argc, char **argv)
   // min heap for finalized time points which are outside of 1 hour window
   std::priority_queue<TimeHit> minHeap;
   // queue for active time points which are inside the 1 hour window
-  // We only need to keep track of the hits of first element
-  // because the hits number will be sequential: the element will have exactly
-  // one fewer hit than the element in front of it.
-  std::queue<TimeHit> activeQueue;
+  // we keep track of number of duplicated time point so the queue won't be
+  // filled with duplicated time points
+  std::queue<std::pair<LogEntry::TimePoint, size_t>> activeQueue;
+  // actual number of hit
+  // actual length of activeQueue if consider duplicates.
+  std::size_t hits(0);
 
+  // auxiliary variables
   const std::chrono::hours oneHour(1);
   // number of statistics needed.
   const size_t N(10);
   std::size_t lineCount(0);
+  std::string timezoneStr;
+  bool isExtraLine(false);
   
-  // insert the first entry into activeQueue so activeQueue is not empty
+  // calculate initial time point and compute timezone string
   std::string s;
   std::getline(infile, s);
   if (!infile.good()) {
@@ -91,43 +87,85 @@ int main(int argc, char **argv)
     outfile.close();
     return 0;
   }
-  ++lineCount;
   LogEntry line(parseLine(s));
-  activeQueue.emplace(1, line);
-  while (true) {
-    std::getline(infile, s);
-    if (!infile.good())
-      break;
-    ++lineCount;
-    line = parseLine(s);
-    // push new time point if not the same as previous time point
-    if (line.time != activeQueue.back().time)
-      activeQueue.emplace(1, line);
-    // finalize time points
-    // not considering the new time point yet
-    while (line.time - activeQueue.front().time > oneHour) {
-      // the element next to the front will have exactly one fewer hit
-      size_t nextHits(activeQueue.front().hits - 1);
-      minHeap.push(activeQueue.front());
-      activeQueue.pop();
-      activeQueue.front().hits = nextHits;
-      // pop heap when full
-      if (minHeap.size() > N)
-        minHeap.pop();
-    }
-    // add one more hit to the front for the new time point
-    activeQueue.front().hits += 1;
+  ++lineCount;
+  const LogEntry::TimePoint initialTime(line.time);
+  { // compute timezone string (time zone should not change in one file)
+    if (line.timezone < 0)
+      timezoneStr = " -";
+    else
+      timezoneStr = " +";
+    const short absTimezone(std::abs(line.timezone));
+    if (absTimezone > 9)
+      timezoneStr += std::to_string(absTimezone);
+    else
+      timezoneStr += "0" + std::to_string(absTimezone);
+    timezoneStr += "00";
   }
-  // dump activeQueue into minHeap
-  while (!activeQueue.empty() &&
-         (minHeap.size() < N || minHeap.top() < activeQueue.front())) {
-    size_t nextHits(activeQueue.front().hits - 1);
-    minHeap.push(activeQueue.front());
-    activeQueue.pop();
-    if (!activeQueue.empty())
-      activeQueue.front().hits = nextHits;
-    if (minHeap.size() > N)
-      minHeap.pop();
+  // insert the first time point in queue
+  activeQueue.emplace(initialTime, 1);
+  hits += 1;
+  while (!isExtraLine) {
+    std::getline(infile, s);
+    if (!infile.good()) {
+      // add a fake line with 2 hour later time so that all element in
+      // activeQueue will be popped
+      isExtraLine = true;
+      line.time += 2 * oneHour;
+    }
+    else {
+      ++lineCount;
+      line = parseLine(s);
+    }
+
+    // add count of duplicate, add total hits, no change otherwise
+    if (line.time == activeQueue.back().first) {
+      activeQueue.back().second += 1;
+      hits += 1;
+      continue;
+    }
+
+    // finalize old time points
+    if (!activeQueue.empty() &&
+        line.time - activeQueue.front().first > oneHour) {
+      // offset to move the beginning of the time window
+      std::chrono::seconds secOffset(0);
+      // window begins before inital time must be adjusted
+      if (activeQueue.back().first - oneHour < initialTime)
+        secOffset = initialTime + oneHour - activeQueue.back().first;
+      // the time span we need to consider pushing into heap
+      const std::chrono::seconds timeSpan(line.time - activeQueue.back().first);
+      // push new elements to heap
+      for (; secOffset < timeSpan; ++secOffset) {
+        // the beginning of time window
+        const LogEntry::TimePoint wbegin(activeQueue.back().first -
+                                         (oneHour - secOffset));
+        // construct a new element
+        TimeHit newTH(hits, wbegin, timezoneStr);
+        // later new element will be smaller
+        // early termination
+        if (minHeap.size() == N && !(minHeap.top() < newTH))
+          break;
+        minHeap.push(newTH);
+        if (minHeap.size() > N)
+          minHeap.pop();
+        // decrease total hits when meeting the front time point
+        if (wbegin == activeQueue.front().first) {
+          hits -= activeQueue.front().second;
+          activeQueue.pop();
+        }
+      }
+      // pop those remained because of early termination of the loop above
+      while (!activeQueue.empty() &&
+             line.time - activeQueue.front().first > oneHour) {
+        hits -= activeQueue.front().second;
+        activeQueue.pop();
+      }
+    }
+
+    // add new time point
+    activeQueue.emplace(line.time, 1);
+    hits += 1;
   }
 
   // reverse the sequence of TimeHit in minHeap for output
