@@ -65,6 +65,9 @@ LogEntry parseLine(const string &s) noexcept
     tm.tm_isdst = 0;
     line.time = std::chrono::time_point_cast<LogEntry::Duration>(
         std::chrono::system_clock::from_time_t(std::mktime(&tm)));
+    // if daylight saving time flag is set, the time will be 1 hour later
+    if (tm.tm_isdst > 0)
+      line.time -= std::chrono::hours(1);
   }
 
   // get timezone
