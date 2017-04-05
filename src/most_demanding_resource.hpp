@@ -16,7 +16,7 @@ public:
   // N - the number of most demanding resource
   explicit MostDemandingResource(size_t N);
   void processLine(const LogEntry &) override;
-  std::string getStat() noexcept override;
+  std::string getStat() override;
 
 private:
   void bubbleUp(size_t index) noexcept;

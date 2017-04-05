@@ -16,7 +16,7 @@ class MostDemandingURLOffline : public Stat
 public:
   explicit MostDemandingURLOffline(size_t N);
   void processLine(const LogEntry &) override;
-  std::string getStat() noexcept override;
+  std::string getStat() override;
 
 private:
   size_t N_;

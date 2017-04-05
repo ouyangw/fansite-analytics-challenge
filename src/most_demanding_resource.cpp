@@ -41,7 +41,7 @@ void MostDemandingResource::processLine(const LogEntry &line)
 
 ////////////////////////////////////////////////////////////////////////////////
 
-std::string MostDemandingResource::getStat() noexcept
+std::string MostDemandingResource::getStat()
 {
   std::stringstream ss;
   for (const std::string &s: firstN_)

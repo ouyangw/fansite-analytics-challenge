@@ -24,7 +24,7 @@ namespace
 
 ////////////////////////////////////////////////////////////////////////////////
 
-std::string MostDemandingURLOffline::getStat() noexcept
+std::string MostDemandingURLOffline::getStat()
 {
   std::stringstream stat;
   std::vector<URLUsage> vec;

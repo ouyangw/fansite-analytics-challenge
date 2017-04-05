@@ -15,7 +15,7 @@ class Stat
 {
 public:
   virtual void processLine(const LogEntry &) = 0;
-  virtual std::string getStat() noexcept = 0;
+  virtual std::string getStat() = 0;
 };
 
 #endif
