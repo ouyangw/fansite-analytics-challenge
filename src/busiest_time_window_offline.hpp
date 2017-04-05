@@ -22,7 +22,7 @@ public:
   using Duration = LogEntry::Duration;
   explicit BusiestTimeWindowOffline(size_t N, const Duration &window);
   void processLine(const LogEntry &) override;
-  std::string getStat() noexcept override;
+  std::string getStat() override;
 
 private:
   void init(const LogEntry &);

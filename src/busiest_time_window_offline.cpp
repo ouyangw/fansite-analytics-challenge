@@ -48,7 +48,7 @@ void BusiestTimeWindowOffline::processLine(const LogEntry &line)
 
 ////////////////////////////////////////////////////////////////////////////////
 
-std::string BusiestTimeWindowOffline::getStat() noexcept
+std::string BusiestTimeWindowOffline::getStat()
 {
   // dump elements in activeQueue_ by using a out-of-range time point
   finalizeOldTimePoint(prevTime_ + 2 * timeWindow_);
