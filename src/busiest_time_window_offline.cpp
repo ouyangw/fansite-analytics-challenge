@@ -112,9 +112,9 @@ void BusiestTimeWindowOffline::finalizeOldTimePoint(
                                      (timeWindow_ - secOffset));
     // construct a new element
     TimeHit newTH(hits_, wbegin, timezoneStr_);
-    // later new element will be smaller
+    // later new element will be larger (larger means smaller hits!)
     // early termination
-    if (minHeap_.size() == N_ && !(minHeap_.top() < newTH))
+    if (minHeap_.size() == N_ && !(newTH < minHeap_.top()))
       break;
     minHeap_.push(newTH);
     if (minHeap_.size() > N_)
