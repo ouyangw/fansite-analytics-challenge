@@ -2,23 +2,24 @@
 // Feature 2: N most bandwidth demanding URL.
 // Offline calculation:
 //   1. Use hashmap to gather data size for each URL
-//   2. Dump the hashmap into a vector and partially sort the vector
+//   2. Use min-heap to find the N most bandwidth demanding URL
 ////////////////////////////////////////////////////////////////////////////////
 
 #include "most_demanding_url_offline.hpp"
 #include <algorithm>
-#include <vector>
+#include <queue>
+#include <stack>
 #include <functional>
 #include <sstream>
 
 namespace
 {
   struct URLUsage {
-    size_t bytes;
     std::string url;
-    URLUsage(size_t b, std::string u)
-        : bytes(b)
-        , url(u)
+    size_t bytes;
+    URLUsage(std::string u, size_t b)
+        : url(u)
+        , bytes(b)
     {
     }
   };
@@ -33,15 +34,26 @@ namespace
 
 std::string MostDemandingURLOffline::getStat()
 {
+  // use min-heap to compute the N most bandwidth demanding URL
+  std::priority_queue<URLUsage, std::vector<URLUsage>, std::greater<URLUsage>>
+      minHeap;
+  auto it(countMap_.begin());
+  for (size_t i(0); i < N_ && it != countMap_.end(); ++i, ++it)
+    minHeap.emplace(it->first, it->second);
+  for (; it != countMap_.end(); ++it) {
+    minHeap.emplace(it->first, it->second);
+    minHeap.pop();
+  }
+  // use a stack to reverse the sequence in minHeap
+  std::stack<URLUsage> stack;
+  while (!minHeap.empty()) {
+    stack.emplace(minHeap.top());
+    minHeap.pop();
+  }
   std::stringstream stat;
-  std::vector<URLUsage> vec;
-  vec.reserve(countMap_.size());
-  for (const auto &p: countMap_)
-    vec.emplace_back(p.second, p.first);
-  size_t size(vec.size() > N_ ? N_ : vec.size());
-  std::partial_sort(vec.begin(), vec.begin() + size, vec.end(),
-                    std::greater<URLUsage>());
-  for (size_t i(0); i < size; ++i)
-    stat << vec[i].url << '\n';
+  while (!stack.empty()) {
+    stat << stack.top().url << '\n';
+    stack.pop();
+  }
   return stat.str();
 }
