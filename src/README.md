@@ -123,3 +123,22 @@ periodically purge some entries in the hashmap that are not actively blocked and
 have time stamps long before the current time. To improve upon this approach, we
 could keep track of the frequency of being blocked for each host and prioritize
 purging of those hosts that are rarely blocked.
+
+## Feature 5
+
+*List the top 10 most bandwidth demanding 60-minute periods*
+
+This feature is very similar to [Feature 3](#feature-3). Instead of keeping
+track of number of connection in the period, we now focus on the total bytes
+exchanged in the period. It is similar to the relation between [Feature
+1](#feature-1) and [Feature 2](#feature-2). While [Feature 3](#feature-3) gives
+a sense of when the server is most frequently accessed and low latency is very
+desired, this feature gives a sense of when people are busy
+downloading/uploading large and/or large amount of files and large bandwidth is
+very desired. This may help to optimize the networking policies.
+
+The implementation is borrowed from [Feature 3](#feature-3) and only minor
+changes are applied.
+
+This feature is not utilized in `main.cpp` but tested in `main_feature5.cpp`
+which is designed for testing individual feature.
