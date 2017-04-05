@@ -37,8 +37,8 @@ int main(int argc, char **argv)
     if (i == 0) firstLine = line;
     std::time_t t(std::chrono::system_clock::to_time_t(line.time));
     // system_clock take into account the time zone in runtime
-    std::tm tm(*std::localtime(&t));
-    std::strftime(time, 21, "%d/%b/%G:%H:%M:%S", &tm);
+    // std::tm tm(*std::localtime(&t));
+    std::strftime(time, 21, "%d/%b/%G:%H:%M:%S", std::localtime(&t));
     outfile << line.host << " - - "
             << '[' << time << ' ';
     if (line.timezone < 0)
