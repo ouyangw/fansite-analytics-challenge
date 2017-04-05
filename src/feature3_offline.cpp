@@ -153,6 +153,8 @@ int main(int argc, char **argv)
         if (wbegin == activeQueue.front().first) {
           hits -= activeQueue.front().second;
           activeQueue.pop();
+          if (activeQueue.empty())
+            break;
         }
       }
       // pop those remained because of early termination of the loop above
