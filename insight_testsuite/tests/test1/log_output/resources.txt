@@ -1,0 +1,10 @@
+/mov/medium.mp4
+/mov/large.mp4
+/image/mosaic.jpg
+/image/landscape.jpg
+/image/portrait.jpg
+/pdf/poster.pdf
+/doc/HOWTO
+/mov/small.mp4
+/doc/README
+/login
