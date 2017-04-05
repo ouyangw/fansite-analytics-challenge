@@ -12,16 +12,17 @@ implementation notes are included in the beginning of implementation files
 
 Offline algorithm is straightforward: use a hashmap (maps from host to number of
 connection) to record how many times each host appears in the log file, and
-after processing all log events, dump the content in hashmap to a vector and
-partially sort the vector to get the top 10 most active host.
+after processing all log events, use a min-heap to screen out the top 10 most
+active host.
 
 The hashmap gives a O(1) access time so reading all entries in the log file
 results in O(N) time complexity where N is the number of entries in the log
-file. The time complexity of partial sort is O(M\*log(10)) where M is the number
-of unique hosts. So the overall time complexity is O(N + M\*log(10)) = O(N).
+file. The time complexity of heap push and pop operation is O(log(10)), so the
+time complexity for processing M number of unique hosts in the hashmap is
+O(M\*log(10)). So the overall time complexity is O(N + M\*log(10)) = O(N).
 
-The space complexity of hashmap and the vector is the same O(M), so the overall
-space complexity is O(M).
+The space complexity of hashmap and the vector is O(M) and O(10), respectively.
+So the overall space complexity is O(M).
 
 ### Online Algorithm
 
@@ -40,8 +41,10 @@ The space complexity is simply O(M + 10) = O(M).
 
 One note before we move on to next topic, an alternative to a vector is a binary
 search tree and the time complexity of changing an element (deleting the old and
-inserting the new element) is O(2\*log(10)). But 10 is a relatively small number
-such that using a bubbling algorithm with vector is sufficient.
+inserting the new element) is O(2\*log(10)). 10 is a relatively small number
+such that using a bubbling algorithm with vector is also efficient. But we
+cannot use a heap here because we need the ordering of the 10 element rather
+than only the least active host among the 10 most active hosts.
 
 ### Offline vs. Online
 
