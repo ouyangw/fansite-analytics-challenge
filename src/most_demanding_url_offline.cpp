@@ -34,7 +34,7 @@ std::string MostDemandingURLOffline::getStat() noexcept
   size_t size(vec.size() > N_ ? N_ : vec.size());
   std::partial_sort(vec.begin(), vec.begin() + size, vec.end(),
                     std::greater<URLUsage>());
-  for (const URLUsage &uu: vec)
-    stat << uu.url << '\n';
+  for (size_t i(0); i < size; ++i)
+    stat << vec[i].url << '\n';
   return stat.str();
 }
