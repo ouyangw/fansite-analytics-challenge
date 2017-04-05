@@ -48,7 +48,7 @@ void MostActiveHost::processLine(const LogEntry &line)
 
 ////////////////////////////////////////////////////////////////////////////////
 
-std::string MostActiveHost::getStat() noexcept
+std::string MostActiveHost::getStat()
 {
   std::stringstream ss;
   for (const std::string &s: firstN_)

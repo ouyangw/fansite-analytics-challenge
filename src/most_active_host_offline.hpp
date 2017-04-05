@@ -17,7 +17,7 @@ public:
   // N - the number of most active host
   explicit MostActiveHostOffline(size_t N);
   void processLine(const LogEntry &) override;
-  std::string getStat() noexcept override;
+  std::string getStat() override;
 
 private:
   const size_t N_;

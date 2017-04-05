@@ -24,7 +24,7 @@ namespace
 
 ////////////////////////////////////////////////////////////////////////////////
 
-std::string MostActiveHostOffline::getStat() noexcept
+std::string MostActiveHostOffline::getStat()
 {
   // dump data in map to vector and partially sort the vector
   std::stringstream stat;
