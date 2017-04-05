@@ -60,8 +60,8 @@ one day's data, the online algorithm will have some edge.
 
 This is very similar to [Feature 1](#feature-1). Instead of keeping track of the
 number of each host accessing the server, we need to keep track of the number of
-byte sent over network for each URL. So the algorithms and the arguments are the
-same.
+byte exchanged over network for each URL. So the algorithms and the arguments
+are the same.
 
 ## Feature 3
 
