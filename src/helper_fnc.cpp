@@ -46,7 +46,8 @@ LogEntry parseLine(const string &s) noexcept
 
   // get timestamp
   idx = s.find_first_of('[', idx);
-  if (idx == string::npos) return line;
+  // check length
+  if (idx == string::npos || idx + 21 > s.size()) return line;
   {
     ++idx;
     std::tm tm = {0};
@@ -74,6 +75,7 @@ LogEntry parseLine(const string &s) noexcept
   idx += 2;
   idx = s.find_first_not_of(' ', idx);
   size_t idxEnd(s.find_first_of(']', idx));
+  if (idxEnd == string::npos) return line;
   line.timezone = std::stoi(s.substr(idx, idxEnd - idx)) / 100;
   idx = idxEnd + 1;
 
@@ -82,20 +84,21 @@ LogEntry parseLine(const string &s) noexcept
   if (idx == string::npos) return line;
   idx += 1;
   idxEnd = s.find_first_of(' ', idx);
+  if (idxEnd == string::npos) return line;
   line.method = s.substr(idx, idxEnd - idx);
   idx = idxEnd;
 
   // get request URL
-  if (idx == string::npos) return line;
   ++idx;
   idxEnd = s.find_first_of(' ', idx);
+  if (idxEnd == string::npos) return line;
   line.url = s.substr(idx, idxEnd - idx);
   idx = idxEnd;
 
   // get request protocol
-  if (idx == string::npos) return line;
   ++idx;
   idxEnd = s.find_first_of(' ', idx);
+  if (idxEnd == string::npos) return line;
   line.protocol = s.substr(idx, idxEnd - idx - 1);
   idx = idxEnd;
 
