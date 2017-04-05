@@ -1,3 +1,11 @@
+////////////////////////////////////////////////////////////////////////////////
+// Feature 1: N most active host.
+// Online calculation:
+//   1. Use hashmap to gather counts for each host
+//   2. Maintain a vector for the N most active host
+//   3. Bubble up host in the vector in each processing
+////////////////////////////////////////////////////////////////////////////////
+
 #include "most_active_host.hpp"
 #include <utility>
 #include <cassert>

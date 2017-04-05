@@ -1,3 +1,10 @@
+////////////////////////////////////////////////////////////////////////////////
+// Feature 1: N most active host.
+// Offline calculation:
+//   1. Use hashmap to gather counts for each host
+//   2. Dump the hashmap into a vector and partially sort the vector
+////////////////////////////////////////////////////////////////////////////////
+
 #include "most_active_host_offline.hpp"
 #include <sstream>
 #include <algorithm>

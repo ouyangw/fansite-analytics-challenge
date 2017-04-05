@@ -1,3 +1,10 @@
+////////////////////////////////////////////////////////////////////////////////
+// Feature 2: N most bandwidth demanding URL.
+// Offline calculation:
+//   1. Use hashmap to gather data size for each URL
+//   2. Dump the hashmap into a vector and partially sort the vector
+////////////////////////////////////////////////////////////////////////////////
+
 #include "most_demanding_url_offline.hpp"
 #include <algorithm>
 #include <vector>

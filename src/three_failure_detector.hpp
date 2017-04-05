@@ -1,9 +1,6 @@
 ////////////////////////////////////////////////////////////////////////////////
 // Feature 4: detect patterns of three consecutive failed log attempts over
 //            a time window and record further access for a period of time
-// Online calculation:
-//   1. Use hashmap to map from host to failed attempts
-//   2. Detect pattern and output blocked attempts
 ////////////////////////////////////////////////////////////////////////////////
 
 #ifndef THREE_FAILURE_DETECTOR_HPP

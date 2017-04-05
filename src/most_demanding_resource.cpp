@@ -1,3 +1,11 @@
+////////////////////////////////////////////////////////////////////////////////
+// Feature 2: N most bandwidth demanding URL.
+// Online calculation:
+//   1. Use hashmap to gather counts for each host
+//   2. Maintain a vector for the N most demanding URL
+//   3. Bubble up host in the vector in each processing
+////////////////////////////////////////////////////////////////////////////////
+
 #include "most_demanding_resource.hpp"
 #include <utility>
 #include <cassert>

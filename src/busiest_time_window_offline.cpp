@@ -1,3 +1,14 @@
+////////////////////////////////////////////////////////////////////////////////
+// Feature 3: N busiest in time window
+// Caution: time window can start anywhere but not limited to the time points in
+//          the log file.
+// Offline calculation:
+//   1. Use min-heap to keep track of N busiest periods outside time window.
+//   2. Use a queue to keep track of periods within time window.
+//   3. Use a fake time that is twice the time window later than the last line
+//      to pop the elements in queue into min-heap.
+////////////////////////////////////////////////////////////////////////////////
+
 #include "busiest_time_window_offline.hpp"
 #include <stack>
 #include <sstream>
