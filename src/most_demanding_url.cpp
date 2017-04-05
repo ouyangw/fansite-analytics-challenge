@@ -6,21 +6,21 @@
 //   3. Bubble up host in the vector in each processing
 ////////////////////////////////////////////////////////////////////////////////
 
-#include "most_demanding_resource.hpp"
+#include "most_demanding_url.hpp"
 #include <utility>
 #include <cassert>
 #include <sstream>
 
 ////////////////////////////////////////////////////////////////////////////////
 
-MostDemandingResource::MostDemandingResource(size_t N): N_(N)
+MostDemandingURL::MostDemandingURL(size_t N): N_(N)
 {
   firstN_.reserve(N);
 }
 
 ////////////////////////////////////////////////////////////////////////////////
 
-void MostDemandingResource::processLine(const LogEntry &line)
+void MostDemandingURL::processLine(const LogEntry &line)
 {
   infoMap_[line.url].accruedBytes += line.responseSize;
   Info &info(infoMap_[line.url]);
@@ -49,7 +49,7 @@ void MostDemandingResource::processLine(const LogEntry &line)
 
 ////////////////////////////////////////////////////////////////////////////////
 
-std::string MostDemandingResource::getStat()
+std::string MostDemandingURL::getStat()
 {
   std::stringstream ss;
   for (const std::string &s: firstN_)
@@ -59,7 +59,7 @@ std::string MostDemandingResource::getStat()
 
 ////////////////////////////////////////////////////////////////////////////////
 
-void MostDemandingResource::bubbleUp(size_t idx) noexcept
+void MostDemandingURL::bubbleUp(size_t idx) noexcept
 {
   Info &info(infoMap_[firstN_[idx]]);
   for (; idx > 0; --idx) {

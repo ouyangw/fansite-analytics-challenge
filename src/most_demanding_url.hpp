@@ -2,15 +2,15 @@
 // Feature 2: N most bandwidth demanding URL.
 ////////////////////////////////////////////////////////////////////////////////
 
-#ifndef MOST_DEMANDING_RESOURCE_HPP
-#define MOST_DEMANDING_RESOURCE_HPP
+#ifndef MOST_DEMANDING_URL_HPP
+#define MOST_DEMANDING_URL_HPP
 
 #include "stat.hpp"
 #include <unordered_map>
 #include <vector>
 #include <string>
 
-class MostDemandingResource : public Stat
+class MostDemandingURL : public Stat
 {
 public:
   // N - the number of most demanding resource
