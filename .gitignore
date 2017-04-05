@@ -1,2 +1,4 @@
 build/
 *.swp
+insight_testsuite/results.txt
+insight_testsuite/temp/*
