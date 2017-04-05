@@ -22,6 +22,9 @@ BusiestTimeWindowOffline::BusiestTimeWindowOffline(size_t N,
 
 void BusiestTimeWindowOffline::processLine(const LogEntry &line)
 {
+  // record time point
+  prevTime_ = line.time;
+
   // if not initialized, initialize and return
   if (!isInitialized_) {
     isInitialized_ = true;
@@ -41,9 +44,6 @@ void BusiestTimeWindowOffline::processLine(const LogEntry &line)
   // add new time point
   activeQueue_.emplace(line.time, 1);
   hits_ += 1;
-
-  // record time point
-  prevTime_ = line.time;
 }
 
 ////////////////////////////////////////////////////////////////////////////////
