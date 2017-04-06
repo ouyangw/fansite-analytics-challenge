@@ -21,7 +21,7 @@ file. The time complexity of heap push and pop operation is O(log(10)), so the
 time complexity for processing M number of unique hosts in the hashmap is
 O(M\*log(10)). So the overall time complexity is O(N + M\*log(10)) = O(N).
 
-The space complexity of hashmap and the vector is O(M) and O(10), respectively.
+The space complexity of hashmap and the heap is O(M) and O(10), respectively.
 So the overall space complexity is O(M).
 
 ### Online Algorithm
@@ -52,10 +52,10 @@ While the implementations for the two classes of algorithm are provided, I
 choose to use the offline algorithm in practice. The reason is that the
 statistics of top 10 most active host is usually computed for a specific time
 span, such as one day, one week or one month, and we can compare the statistics
-from different time periods. In such a scenario, we are usually looking at
-offline data rather than real-time data. That being said, if we want more
-granular statistics within a time span, such as the statistics for every hour in
-one day's data, the online algorithm will have some edge.
+from different times. In such a scenario, we are usually looking at offline data
+rather than real-time data. That being said, if we want more granular statistics
+within a time span, such as the statistics for each hour in one day's data, the
+online algorithm will have some edge.
 
 ## Feature 2
 
@@ -81,7 +81,7 @@ track of the top 10 busiest periods that are finalized and use a queue to keep
 track of periods that are still active (subject to change). One caveat is that
 because the period can begin at any time point but not limited to the time point
 of events, so when finalizing periods from active queue to the min-heap I need
-to consider every seconds that are finalized. Another caveat is that the period
+to consider every second that are finalized. Another caveat is that the period
 cannot begin before the time point of first event in the log.
 
 For this offline algorithm I will dump all periods in the active queue into the
@@ -93,8 +93,9 @@ seconds from the first event to the last event in the log file, because we need
 to consider every second as the beginning of a period and the min-heap has a
 time complexity of O(log(10)) for modification.
 
-The space complexity is O(10 + M) where M is the number of events that are
-within 1 hour which are kept in the active queue.
+The space complexity is O(10 + 3600) = O(1). The 3600 comes from the fact that
+there are 3600 seconds in an hour and this is the maximum number of element in
+the active queue.
 
 ### Online Algorithm (not implemented)
 
