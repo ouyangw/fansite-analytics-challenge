@@ -14,7 +14,7 @@ class MostDemandingURL : public Stat
 {
 public:
   // N - the number of most demanding resource
-  explicit MostDemandingResource(size_t N);
+  explicit MostDemandingURL(size_t N);
   void processLine(const LogEntry &) override;
   std::string getStat() override;
 
