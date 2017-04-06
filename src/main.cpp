@@ -33,17 +33,17 @@ int main(int argc, char **argv)
   }
   std::ofstream outfile2(argv[3]);
   if (!outfile2.good()) {
-    std::cerr << "Error: cannot open file: " << argv[2] << '\n';
+    std::cerr << "Error: cannot open file: " << argv[3] << '\n';
     return 4;
   }
   std::ofstream outfile3(argv[4]);
   if (!outfile3.good()) {
-    std::cerr << "Error: cannot open file: " << argv[2] << '\n';
+    std::cerr << "Error: cannot open file: " << argv[4] << '\n';
     return 5;
   }
   std::ofstream outfile4(argv[5]);
   if (!outfile4.good()) {
-    std::cerr << "Error: cannot open file: " << argv[2] << '\n';
+    std::cerr << "Error: cannot open file: " << argv[5] << '\n';
     return 6;
   }
 
