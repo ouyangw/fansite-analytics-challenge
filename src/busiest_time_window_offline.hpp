@@ -59,8 +59,8 @@ private:
 
 inline BusiestTimeWindowOffline::TimeHit::TimeHit(
     size_t h, const LogEntry::TimePoint &time, const std::string &timezoneStr)
-    : timeStr()
-    , hits(h)
+    : hits(h)
+    , timeStr()
 {
   // construct the string representation of time: timeStr
   char tmp[21];
