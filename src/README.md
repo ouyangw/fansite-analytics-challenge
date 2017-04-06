@@ -12,7 +12,7 @@ implementation notes are included in the beginning of implementation files
 
 Offline algorithm is straightforward: use a hashmap (maps from host to number of
 connection) to record how many times each host appears in the log file, and
-after processing all log events, use a min-heap to screen out the top 10 most
+after processing all log events, use a min-heap to extract the top 10 most
 active host.
 
 The hashmap gives a O(1) access time so reading all entries in the log file
